@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
-import { DynamicLoader } from './dynamic-loader.service';
+import { DynamicLoaderService } from './dynamic-loader.service';
 import { provideRoutes } from '@angular/router';
 
 @NgModule({
@@ -17,7 +17,7 @@ import { provideRoutes } from '@angular/router';
     HttpModule
   ],
   providers: [
-    DynamicLoader,
+    DynamicLoaderService,
     SystemJsNgModuleLoader,
     provideRoutes([
         { loadChildren: 'app/lazy/lazy.module#LazyModule' }

@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 
 import {LazyComponent} from "./lazy/lazy.module"; // you can import the def, for type safety, or skip this, and use as an <any>
-import {DynamicLoader} from "./dynamic-loader.service";
+import {DynamicLoaderService} from "./dynamic-loader.service";
 
 @Component({
     selector: 'app-root',
@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
   lazymodule;
   lazycomp;
 
-  constructor( private loader: DynamicLoader, private root_container: ViewContainerRef ) {}
+  constructor( private loader: DynamicLoaderService, private root_container: ViewContainerRef ) {}
 
   ngOnInit() {
   }

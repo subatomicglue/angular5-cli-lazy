@@ -58,7 +58,7 @@ Refactored from demo: https://github.com/alexzuza/angular-cli-lazy
 // Dynamically load an NgModule's corresponding .js bundle
 // This is a service which allows SystemJsNgModuleLoader and Injector injected in the constructor for convenience
 @Injectable()
-export class DynamicLoader {
+export class DynamicLoaderService {
   cache:any = {};
 
   constructor( private loader: SystemJsNgModuleLoader, private inj: Injector ) {}
