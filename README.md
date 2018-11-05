@@ -4,7 +4,7 @@ Forked from https://github.com/alexzuza/angular-cli-lazy, refactored into lazy-l
 
 Here we present a `LazyLoaderService` Angular `Service` which has methods to manually `load` a `NgModule`, and `create` a
 `Component` found inside the module.  We show how to manually lazy-load by using just a function call, instead of the
-well known method of using Angular `Router` URL routes.  
+more well-known method of lazy-loading on Angular `Router` URL route changes.
 
 # Background
 In Angular, `NgModule`s will be compiled out to separate `.js` files, which gives the opportunity to lazy-load them much
