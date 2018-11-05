@@ -11,9 +11,13 @@ Refactored from demo: https://github.com/alexzuza/angular-cli-lazy
 * Register LazyLoaderService & SystemJsNgModuleLoader as providers in your app.module.ts:
     import { LazyLoaderService } from './lazy-loader.service';
     import { NgModule, SystemJsNgModuleLoader } from '@angular/core';
+    import { provideRoutes } from '@angular/router';
     providers: [
       LazyLoaderService,
       SystemJsNgModuleLoader,
+      provideRoutes([
+          { loadChildren: 'app/lazy/my-lazy.module#MyLazyModule' } // needed for production builds (not dev)
+      ])
     ]
 
 * Create a place in your DOM to load the new component onto:
