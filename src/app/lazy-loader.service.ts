@@ -8,7 +8,7 @@ Refactored from demo: https://github.com/alexzuza/angular-cli-lazy
 
 [Load an NgModule at runtime]
 
-* Register LazyLoaderService as a provider in your app.module.ts:
+* Register LazyLoaderService & SystemJsNgModuleLoader as providers in your app.module.ts:
     import { LazyLoaderService } from './lazy-loader.service';
     import { NgModule, SystemJsNgModuleLoader } from '@angular/core';
     providers: [
@@ -19,9 +19,9 @@ Refactored from demo: https://github.com/alexzuza/angular-cli-lazy
 * Create a place in your DOM to load the new component onto:
     <div id='container'></div>
 
-* Use LazyLoaderService to load an NgModule and create a new LazyComponent, from inside one of your app components:
+* Use LazyLoaderService to lazy-load an NgModule and Component, from inside an app component:
     import {LazyLoaderService} from "./lazy-loader.service";
-    import {LazyComponent} from "./lazy/my-lazy.module"; // you can import the type, or omit this step and go typeless
+    import {MyLazyComponent} from "./lazy/my-lazy.module"; // you can import the type, or omit this step and go typeless
 
     @ViewChild('container', {read: ViewContainerRef}) container: ViewContainerRef;
     constructor( private loader: LazyLoaderService, private root_container: ViewContainerRef ) {}
