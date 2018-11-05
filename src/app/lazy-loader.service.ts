@@ -3,10 +3,43 @@ import {
 } from '@angular/core';
 
 /*
-Dynamically load an NgModule's corresponding .js bundle
+Lazy load an NgModule's .js bundle, instantiate a component
 Refactored from demo: https://github.com/alexzuza/angular-cli-lazy
 
-[How to create an NgModule]:
+[Load an NgModule at runtime]
+
+* Register LazyLoaderService as a provider in your app.module.ts:
+    import { LazyLoaderService } from './lazy-loader.service';
+    import { NgModule, SystemJsNgModuleLoader } from '@angular/core';
+    providers: [
+      LazyLoaderService,
+      SystemJsNgModuleLoader,
+    ]
+
+* Create a place in your DOM to load the new component onto:
+    <div id='container'></div>
+
+* Use LazyLoaderService to load an NgModule and create a new LazyComponent, from inside one of your app components:
+    import {LazyLoaderService} from "./lazy-loader.service";
+    import {LazyComponent} from "./lazy/my-lazy.module"; // you can import the type, or omit this step and go typeless
+
+    @ViewChild('container', {read: ViewContainerRef}) container: ViewContainerRef;
+    constructor( private loader: LazyLoaderService, private root_container: ViewContainerRef ) {}
+    async load() {
+      this.lazymodule = await this.loader.load( 'MyLazyModule', app/lazy/my-lazy.module' );
+      // do things
+      this.lazycomp = this.lazymodule.create( "MyLazyComponent", container );      // add a new lazycomponent to the <div>
+      this.lazycomp = this.lazymodule.create( "MyLazyComponent", root_container ); // add a new lazycomponent to the page root
+      this.lazycomp = this.lazymodule.create( "MyLazyComponent" );                 // new component (dont add to DOM)
+      this.lazycomp.instance.myMethod();                                         // how to access the methods of the component
+    }
+    ngOnDestroy() {
+      this.lazycomp.destroy();   // remove the component from the DOM and delete
+      this.lazymodule.destroy(); // destroys every load()'d instance of the module
+    }
+
+
+[Create a Component and NgModule to lazy-load]:
 
   import { Component, NgModule } from '@angular/core';
   import { CommonModule } from '@angular/common';
@@ -25,40 +58,12 @@ Refactored from demo: https://github.com/alexzuza/angular-cli-lazy
   export class LazyModule {
     static creatableComponents = { LazyComponent, }; //  we use this convention to add components that can be created
   }
-
-[How to Load an NgModule at runtime]
-
-* Register DynamicLoader as a provider in your app.module.ts:
-    import { DynamicLoader } from './dynamic-loader.service';
-    providers: [DynamicLoader]
-
-* Create a place in your DOM to load the new component onto:
-    <div id='container'></div>
-
-* Use DynamicLoader to load an NgModule and create a new LazyComponent, from inside one of your app components:
-    import {DynamicLoader} from "./dynamic-loader.service";
-    import {LazyComponent} from "./lazy/lazy.module"; // you can import the type, or omit this step and go typeless
-
-    @ViewChild('container', {read: ViewContainerRef}) container: ViewContainerRef;
-    constructor( private loader: DynamicLoader, private root_container: ViewContainerRef ) {}
-    async load() {
-      this.lazymodule = await this.loader.load( 'LazyModule', app/lazy/lazy.module' );
-      // do things
-      this.lazycomp = this.lazymodule.create( "LazyComponent", container );      // add a new lazycomponent to the <div>
-      this.lazycomp = this.lazymodule.create( "LazyComponent", root_container ); // add a new lazycomponent to the page root
-      this.lazycomp = this.lazymodule.create( "LazyComponent" );                 // new component (dont add to DOM)
-      this.lazycomp.instance.myMethod();                                         // how to access the methods of the component
-    }
-    ngOnDestroy() {
-      this.lazycomp.destroy();   // remove the component from the DOM and delete
-      this.lazymodule.destroy(); // destroys every load()'d instance of the module
-    }
 */
 
 // Dynamically load an NgModule's corresponding .js bundle
 // This is a service which allows SystemJsNgModuleLoader and Injector injected in the constructor for convenience
 @Injectable()
-export class DynamicLoaderService {
+export class LazyLoaderService {
   cache:any = {};
 
   constructor( private loader: SystemJsNgModuleLoader, private inj: Injector ) {}

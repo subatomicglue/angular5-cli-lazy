@@ -3,8 +3,8 @@ import {
     ViewContainerRef
 } from '@angular/core';
 
-import {LazyComponent} from "./lazy/lazy.module"; // you can import the def, for type safety, or skip this, and use as an <any>
-import {DynamicLoaderService} from "./dynamic-loader.service";
+import {MyLazyComponent} from "./lazy/my-lazy.module"; // you can import the def, for type safety, or skip this, and use as an <any>
+import {LazyLoaderService} from "./lazy-loader.service";
 
 @Component({
     selector: 'app-root',
@@ -17,16 +17,16 @@ export class AppComponent implements OnInit {
   lazymodule;
   lazycomp;
 
-  constructor( private loader: DynamicLoaderService, private root_container: ViewContainerRef ) {}
+  constructor( private loader: LazyLoaderService, private root_container: ViewContainerRef ) {}
 
   ngOnInit() {
   }
 
   async load() {
-    this.lazymodule = await this.loader.load( 'LazyModule', 'app/lazy/lazy.module' );
-    this.lazycomp = this.lazymodule.create( "LazyComponent", this.container );
-    //this.lazycomp = this.lazymodule.create( "LazyComponent", this.root_container );
-    //this.lazycomp = this.lazymodule.create( "LazyComponent" );
+    this.lazymodule = await this.loader.load( 'MyLazyModule', 'app/lazy/my-lazy.module' );
+    this.lazycomp = this.lazymodule.create( "MyLazyComponent", this.container );
+    //this.lazycomp = this.lazymodule.create( "MyLazyComponent", this.root_container );
+    //this.lazycomp = this.lazymodule.create( "MyLazyComponent" );
 
     // how to access the methods of the component
     this.lazycomp.instance.increment();
