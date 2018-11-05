@@ -15,7 +15,7 @@ Historically, it has been well documented how to lazy-load NgModules based on UR
 well-documented how one might lazy-load an `NgModule` using a function call (not tied to Angular route changes).
 
 # Restrictions
-- We only show how to load known modules.
+- We only show how to load modules known to the App at build time.
 - This will not work to load an unknown module (useful e.g. in Ad systems where customer gives a new bundle of code with their Ad to an already running system.)
 
 # Documentation for LazyLoaderService
