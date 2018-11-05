@@ -47,16 +47,16 @@ Refactored from demo: https://github.com/alexzuza/angular-cli-lazy
     selector: 'lazy-comp',
     template: ``
   })
-  export class LazyComponent {
+  export class MyLazyComponent {
     myMethod() {}
   }
   @NgModule({
     imports: [CommonModule],
-    declarations: [LazyComponent],    // refer to your lazyload component
-    entryComponents: [LazyComponent]
+    declarations: [MyLazyComponent],    // refer to your lazyload component
+    entryComponents: [MyLazyComponent]
   })
-  export class LazyModule {
-    static creatableComponents = { LazyComponent, }; //  we use this convention to add components that can be created
+  export class MyLazyModule {
+    static creatableComponents = { MyLazyComponent, }; //  we use this convention to add components that can be created
   }
 */
 
