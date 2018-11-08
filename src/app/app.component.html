@@ -1,10 +1,7 @@
-<h1>
-  {{title}}
-</h1>
+<h1>angular-cli example of SystemJsNgModuleLoader.load</h1>
 
   <div #container></div>
-  <div (click)="load()">loadme</div>
-  <div (click)="unload()">unloadme</div>
-
-
-
+  <BR>
+  <button (click)="load()">lazy-load MyLazyComponent</button><BR>
+  <button (click)="load2()">lazy-load MyLazy2Component</button><BR>
+  <button (click)="unload()">unload</button>

@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { LazyLoaderService } from './lazy-loader.service';
-//import { provideRoutes } from '@angular/router';
+import { provideRoutes } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -14,15 +14,23 @@ import { LazyLoaderService } from './lazy-loader.service';
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
   ],
   providers: [
     LazyLoaderService,
     SystemJsNgModuleLoader,
-    /*provideRoutes([
-        { loadChildren: 'app/lazy/my-lazy.module#MyLazyModule' }
+    provideRoutes([
+      // All lazy-load modules need to be listed so production build can generate separate X.xxx.chunk.js files
+      // You could alternatively designate these in the lazyloaded NgModules
+      //   themselves so that they "self describe" that they should be compiled
+      //   to a separate chunk.js file.
+      // It's unfortunate to need to specify the paths (and NgModule name as a
+      //   string) here, however... Rather than just refer to the type.
+      // TODO: someone help figure this out!
+      { loadChildren: 'app/lazy/my-shared.module#MySharedModule' },
+      { loadChildren: 'app/lazy/my-lazy.module#MyLazyModule' },
+      { loadChildren: 'app/lazy/my-lazy2.module#MyLazy2Module' },
     ])
-    */
   ],
   bootstrap: [AppComponent]
 })

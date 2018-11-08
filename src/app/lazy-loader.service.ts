@@ -1,6 +1,8 @@
 import {
-  Injectable, Injector, NgModuleFactory, SystemJsNgModuleLoader, ViewContainerRef
+  Injectable, Inject, Injector, NgModuleFactory, SystemJsNgModuleLoader, ViewContainerRef
 } from '@angular/core';
+
+import { DOCUMENT } from '@angular/platform-browser';
 
 /*
 Lazy load an NgModule's .js bundle, instantiate a component
@@ -70,7 +72,7 @@ Refactored from demo: https://github.com/alexzuza/angular-cli-lazy
 export class LazyLoaderService {
   cache:any = {};
 
-  constructor( private loader: SystemJsNgModuleLoader, private inj: Injector ) {}
+  constructor( private loader: SystemJsNgModuleLoader, private inj: Injector, @Inject(DOCUMENT) private readonly document: any ) {}
 
   // load a NgModule given the path to it's .ts file (e.g. 'app/lazy/lazy.module#LazyModule')
   // if it's already been loaded before, it'll return a cached version.
@@ -101,9 +103,10 @@ export class LazyLoaderService {
             url: moduleURL,
             factory: compFactory,
             moduleRef: moduleRef,
+            moduleType: (<any>moduleFactory.moduleType),
             // method to create components (see entry)
             create: (componentType: string, viewRef: ViewContainerRef) => viewRef ? viewRef.createComponent( compFactory[componentType].factory ) : compFactory[componentType].factory.create( this.inj ),
-            // questionable how useful this is, the .js module doesn't seem to actually unload.
+            // questionable how useful this is, the x.xxxx.chunk.js doesn't seem to actually unload.
             destroy: function() { ths.unload( this ); }
           };
 
@@ -129,5 +132,41 @@ export class LazyLoaderService {
       moduleBundle.factory = undefined;
       delete this.cache[moduleBundle.url];
     }
+  }
+
+  // lazy load a js script (e.g. such as jquery or pdfjs)
+  // add script to .angular-cli.json with lazy attribute
+  // "scripts": [
+  //   { "input": "../node_modules/jquery/dist/jquery.js", "output": "jquery", "lazy": true }
+  // ],
+  // You'll get an jquery.bundle.js file in the build output which you can lazy-load js modules with
+  // - loadJs()
+  //   or...
+  // - import() if you use "esnext" language generation:
+  //    import('jquery')
+  //      .then((module: Function) => {
+  //        window['$'] = module;
+  //    });
+  //   or...
+  // - require() will embed the js module into the current x.xx.chunk.js, so use require() in a NgModule and use load() to lazy-load
+  //
+  // you can access any globals (e.g. html2canvas) created by the load, with:
+  // - (<any>global).html2canvas
+  private loadedLibraries = {};
+  public loadJs(url: string): Promise<any> {
+    return new Promise( (rs, rj) => {
+      if (this.loadedLibraries[url]) {
+        return this.loadedLibraries[url];
+      }
+
+      const script = this.document.createElement('script');
+      script.type = 'text/javascript';
+      script.onload = () => {
+        this.loadedLibraries[url] = script;
+        return rs( script );
+      };
+      script.src = url;
+      this.document.body.appendChild(script);  // could use head instead
+    });
   }
 }
