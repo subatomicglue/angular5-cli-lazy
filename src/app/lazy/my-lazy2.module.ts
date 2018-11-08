@@ -8,7 +8,7 @@ import { MySharedModule } from './my-shared.module';
   template: `
   <h2>Lazy loaded MyLazy2Component, a complex PDF writer!</h2>
   <button (click)="show = true; writePDF();">Write PDF</button>
-<div *ngIf="show" id='dom-to-print'>
+<div *ngIf="show" [style.width.px]="content_width" [style.height.px]="content_height" id='dom-to-print'>
   <div id='header'>
     <div id='left' style='line-height: 40px;'>Company Summary</div>
     <div id='right'><img src='assets/logo.png'></div>
@@ -101,8 +101,6 @@ import { MySharedModule } from './my-shared.module';
   button {background-color:#ff0000;color:#ffffff;}
   #dom-to-print {
     position: relative;
-    width: 100%;
-    height: 100vh;
     background-color: #ffffff;
     color: #000000;
     font-family: Helvetica, Arial, Sans-Serif;
@@ -159,29 +157,29 @@ import { MySharedModule } from './my-shared.module';
 })
 export class MyLazy2Component {
   show = false;
+  content_width = 100;
+  content_height = 100;
 
   async writePDF() {
     this.show = true;
 
+    let doc_width = 8.27;  // A4 measures 210 × 297 millimeters or 8.27 × 11.69 inches
+    let doc_height = 11.69;
+    let aspect = doc_height / doc_width;
+    let dpi = 96; // HTML assumes that the screen is 96 DPI, or that 1 pixel is 1/96 of an inch.
+    let img_width = doc_width * dpi;
+    let img_height = doc_height * dpi;
+    let win_width = img_width;
+    let win_height = img_height;
+    this.content_width = win_width;
+    this.content_height = win_height-1; // avoid creating page2
+
     // give the DOM a chance to update.
     setTimeout( async () => {
-      let doc_width = 8.27;  // A4 measures 210 × 297 millimeters or 8.27 × 11.69 inches
-      let doc_height = 11.69;
-      let aspect = doc_height / doc_width;
-      let dpi = 96; // default
-      let img_width = doc_width * dpi;
-      let img_height = doc_height * dpi;
-      let win_width = img_width;
-      let win_height = img_height;
-
       // render the page to an image
       // https://html2canvas.hertzen.com/configuration
       let html2canvasOpts = {
-        scale: 1, // 96 is the default DPI.  dpi = scale*96
-        // width: img_width,
-        // height: img_height,
-        // windowWidth: win_width,
-        windowHeight: win_height - 3, // because of margins
+        scale: 300/96, // 96 is usually the default DPI.  dpi = scale * window.devicePixelRatio
       };
 
       // draw the image into a PDF doc and save
