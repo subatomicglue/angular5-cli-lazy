@@ -172,14 +172,15 @@ export class MyLazy2Component {
     let win_width = img_width;
     let win_height = img_height;
     this.content_width = win_width;
-    this.content_height = win_height-1; // avoid creating page2
+    this.content_height = win_height-2; // avoid creating page2
 
     // give the DOM a chance to update.
     setTimeout( async () => {
       // render the page to an image
       // https://html2canvas.hertzen.com/configuration
       let html2canvasOpts = {
-        scale: 300/96, // 96 is usually the default DPI.  dpi = scale * window.devicePixelRatio
+        scale: 300/dpi, // 96 is the default HTML DPI which html2canvas uses.  dpi = scale * 96
+        //scale: 120/dpi
       };
 
       // draw the image into a PDF doc and save
