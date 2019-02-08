@@ -27,9 +27,9 @@ import { provideRoutes } from '@angular/router';
       // It's unfortunate to need to specify the paths (and NgModule name as a
       //   string) here, however... Rather than just refer to the type.
       // TODO: someone help figure this out!
-      { loadChildren: 'app/lazy/my-shared.module#MySharedModule' },
-      { loadChildren: 'app/lazy/my-lazy.module#MyLazyModule' },
-      { loadChildren: 'app/lazy/my-lazy2.module#MyLazy2Module' },
+      { loadChildren: 'app/lazy/my-shared.module#MySharedModule', path: '-------ignore-not-a-valid-path-00001-------' },
+      { loadChildren: 'app/lazy/my-lazy.module#MyLazyModule', path: '-------ignore-not-a-valid-path-00002-------' },
+      { loadChildren: 'app/lazy/my-lazy2.module#MyLazy2Module', path: '-------ignore-not-a-valid-path-00003-------' },
     ])
   ],
   bootstrap: [AppComponent]

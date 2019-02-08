@@ -185,11 +185,13 @@ export class MyLazy2Component {
 
       // draw the image into a PDF doc and save
       // https://rawgit.com/MrRio/jsPDF/master/docs/jsPDF.html
-      let jsPDFOpts = {
-        orientation: 'portrait',
-        unit: 'in',
-        format: [doc_width, doc_height]
-      };
+      //let jsPDFOpts = {
+      //  orientation: 'portrait',
+      //  unit: 'in',
+      //  format: [doc_width, doc_height]
+      //};
+      let jsPDFOpts = { unit: 'mm', format: 'a4', orientation: 'portrait', pagesplit: true}
+
 
       // html2canvas + jsPDF:
       // let jsPDF = MySharedModule.jsPDF;
